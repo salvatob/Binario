@@ -1,8 +1,15 @@
+import math
 
 
+def parse_input(whites: str, blacks: str):
+    size = len(whites)
+    if len(blacks) != size or math.isqrt(size)**2 != size:
+        raise ValueError(f"invalid input")
+    clauses = []
 
-
-def encode(whites, blacks, size: int):
+def encode( size: int) -> list[list[int]]:
+    # each logical variable is encoded as an int, accessed exclusively through an array
+    # using standard array coordinates (indexes)
     variables = [ [j + (i*size) + 1 for j in range(size)] for i in range(size)]
     return variables
 
@@ -14,19 +21,26 @@ def encode_grouping(vars : list[list[int]]):
     size = len(vars)
     clausules : list[str] = []
 
+def encode_grouping(variables : list[list[int]]):
+    # for any row/column, no more, than 2 same values can be next to each other
+    # equivalent with: for each three dots, that are directly next to each other vertically or diagonally
+    # one must be different
+    size = len(variables)
+    clauses : list[str] = []
+
     for i in range(size):
         for j in range(size - 2):
-            row_positive = f"{vars[i][j]} {vars[i][j+1]} {vars[i][j+2]}"
-            row_negative = f"-{vars[i][j]} -{vars[i][j+1]} -{vars[i][j+2]}"
-            clausules.append(row_positive)
-            clausules.append(row_negative)
+            row_positive = f"{variables[i][j]} {variables[i][j + 1]} {variables[i][j + 2]} 0"
+            row_negative = f"-{variables[i][j]} -{variables[i][j + 1]} -{variables[i][j + 2]} 0"
+            clauses.append(row_positive)
+            clauses.append(row_negative)
 
-            column_positive = f"{vars[j][i]} {vars[j+1][i]} {vars[j+2][i]}"
-            column_negative = f"-{vars[j][i]} -{vars[j+1][i]} -{vars[j+2][i]}"
-            clausules.append(column_positive)
-            clausules.append(column_negative)
+            column_positive = f"{variables[j][i]} {variables[j + 1][i]} {variables[j + 2][i]} 0"
+            column_negative = f"-{variables[j][i]} -{variables[j + 1][i]} -{variables[j + 2][i]} 0"
+            clauses.append(column_positive)
+            clauses.append(column_negative)
 
-    return clausules
+    return clauses
 
 
 if __name__ == '__main__':
