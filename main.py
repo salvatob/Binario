@@ -7,7 +7,7 @@ def parse_input(whites: str, blacks: str):
         raise ValueError(f"invalid input")
     clauses = []
 
-def encode( size: int) -> list[list[int]]:
+def create_logical_variables(size: int) -> list[list[int]]:
     # each logical variable is encoded as an int, accessed exclusively through an array
     # using standard array coordinates (indexes)
     variables = [ [j + (i*size) + 1 for j in range(size)] for i in range(size)]
