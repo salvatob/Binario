@@ -1,11 +1,33 @@
-import math
+def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]:
+    positive_literal = 'X'
+    negative_literal = 'O'
+    unknown_literal = '_'
 
-
-def parse_input(whites: str, blacks: str):
-    size = len(whites)
-    if len(blacks) != size or math.isqrt(size)**2 != size:
-        raise ValueError(f"invalid input")
     clauses = []
+    with open(input_file_path, "r") as file:
+
+        lines = file.readlines()
+
+
+        # print("lines")
+        # for line in lines:
+        #     print(line)
+        #
+        # print("------")
+        puzzle_size = len(lines)
+        if lines[-1] == "":
+            puzzle_size -= 1
+
+        variables = create_logical_variables(puzzle_size)
+
+        for  line, row in zip(lines, variables):
+            for i, char in enumerate(line):
+                if char == positive_literal:
+                    clauses.append(f"{row[i]}")
+                if char == negative_literal:
+                    clauses.append(f"-{row[i]}")
+
+    return variables, clauses, puzzle_size
 
 def create_logical_variables(size: int) -> list[list[int]]:
     # each logical variable is encoded as an int, accessed exclusively through an array
