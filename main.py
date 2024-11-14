@@ -35,15 +35,16 @@ def create_logical_variables(size: int) -> list[list[int]]:
     variables = [ [j + (i*size) + 1 for j in range(size)] for i in range(size)]
     return variables
 
-def encode_row_uniqueness(variables : list[list[int]]):
+def encode_line_uniqueness(variables : list[list[int]]):
     size = len(variables)
+    clauses = []
     for i in range(size):
         for j in range(i+1, size):
-            compare_rows(variables, i,j)
+            clauses += (compare_rows(variables, i,j))
+            clauses += (compare_columns(variables, i,j))
+    return clauses
 
-
-def compare_rows(variables : list[list[int]], row1 : int, row2 : int):
-    # size = len(variables)
+def compare_rows(variables : list[list[int]], row1 : int, row2 : int) -> list[str]:
     variables_first = variables[row1]
     variables_second = variables[row2]
     statements = []
@@ -52,6 +53,21 @@ def compare_rows(variables : list[list[int]], row1 : int, row2 : int):
 
     return statements
 
+def compare_columns(variables : list[list[int]], column1 : int, column2 : int) -> list[str]:
+    size = len(variables)
+
+    variables_first = []
+    variables_second = []
+
+    for i in range(size):
+        variables_first.append(variables[i][column1])
+        variables_second.append(variables[i][column2])
+
+    statements = []
+
+    recursively_encode_lines(variables, 0, variables_first, variables_second, "", statements)
+
+    return statements
 
 def recursively_encode_lines(variables : list[list[int]], current_depth: int, variables_1 : list[int] , variables_2 : list[int], current_bracket : str, clausules : list[str]):
     if current_depth >= len(variables_1):
@@ -65,8 +81,7 @@ def recursively_encode_lines(variables : list[list[int]], current_depth: int, va
         new_bracket = current_bracket + each_var
         recursively_encode_lines(variables, current_depth + 1, variables_1, variables_2, new_bracket, clausules)
 
-
-def encode_grouping(variables : list[list[int]]):
+def encode_grouping(variables : list[list[int]]) -> list[str]:
     # for any row/column, no more, than 2 same values can be next to each other
     # equivalent with: for each three dots, that are directly next to each other vertically or diagonally
     # one must be different
