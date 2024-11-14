@@ -103,20 +103,35 @@ def encode_grouping(variables : list[list[int]]) -> list[str]:
     return clauses
 
 
+def encode_puzzle(input_file_path):
+    variables, puzzle_specific_clauses, size = parse_input(input_file_path)
+
+    grouping_clauses = encode_grouping(variables)
+
+    uniqueness_clauses = encode_line_uniqueness(variables)
+
+    sum_of_clauses = len(puzzle_specific_clauses) + len(grouping_clauses) + len(uniqueness_clauses)
+
+    with open("output.txt", "a") as file:
+        file.truncate(0)
+        file.write(f"p cnf {size * size} {sum_of_clauses}")
+        for clause in puzzle_specific_clauses:
+            file.write(f"\n{clause} 0")
+        for clause in grouping_clauses:
+            file.write(f"\n{clause} 0")
+
+        for clause in uniqueness_clauses:
+            file.write(f"\n{clause} 0")
+
 if __name__ == '__main__':
-    e = encode(4)
+    # e = create_logical_variables(6)
     # p = encode_grouping(e)
     # print(p)
 
-    r = compare_rows(e,0,1)
-    for x in r:
-        print(x)
+    encode_puzzle( "input.txt")
 
-    # parse_input("", "ff")
-    # encode_row_uniqueness(e)
-    #
-    # s = "123"
-    # p = s
-    # p += "4"
-    # print(s)
-    # print(p)
+    # print(inp)
+
+    # r = compare_rows(e,0,1)
+    # for x in r:
+    #     print(x)
