@@ -55,7 +55,6 @@ def compare_rows(variables : list[list[int]], row1 : int, row2 : int):
 
 def recursively_encode_lines(variables : list[list[int]], current_depth: int, variables_1 : list[int] , variables_2 : list[int], current_bracket : str, clausules : list[str]):
     if current_depth >= len(variables_1):
-        current_bracket += " 0"
         clausules.append(current_bracket)
         return
     new_additions = [
@@ -76,13 +75,13 @@ def encode_grouping(variables : list[list[int]]):
 
     for i in range(size):
         for j in range(size - 2):
-            row_positive = f"{variables[i][j]} {variables[i][j + 1]} {variables[i][j + 2]} 0"
-            row_negative = f"-{variables[i][j]} -{variables[i][j + 1]} -{variables[i][j + 2]} 0"
+            row_positive = f"{variables[i][j]} {variables[i][j + 1]} {variables[i][j + 2]}"
+            row_negative = f"-{variables[i][j]} -{variables[i][j + 1]} -{variables[i][j + 2]}"
             clauses.append(row_positive)
             clauses.append(row_negative)
 
-            column_positive = f"{variables[j][i]} {variables[j + 1][i]} {variables[j + 2][i]} 0"
-            column_negative = f"-{variables[j][i]} -{variables[j + 1][i]} -{variables[j + 2][i]} 0"
+            column_positive = f"{variables[j][i]} {variables[j + 1][i]} {variables[j + 2][i]}"
+            column_negative = f"-{variables[j][i]} -{variables[j + 1][i]} -{variables[j + 2][i]}"
             clauses.append(column_positive)
             clauses.append(column_negative)
 
