@@ -102,7 +102,7 @@ Nerovnost dvou proměnných kóduji jako:
 $p \neq q \approx (p \lor q) \land (\neg p \lor \neg q)$.
 
 Všechny páry proměnných takto v závorkách spojím do disjunkce.
-$p_{*}$ je jeden řádek, $q_\*$ je jiný řádek.
+$p_{*}$ je jeden řádek, $q_{*}$ je jiný řádek.
 
 $$\bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
 \land (\neg p_{i} \lor \neg q_{i})) =
@@ -131,7 +131,7 @@ nicméně počet klauzulí roste exponenciálně.
 
 Pomocí těchto úprav lze finální výrok generovat jako:
 $$\bigwedge \left \{
-(x_1 \lor x_2 \lor \.\.\.x_n)
+(x_1 \lor x_2 \lor ... x_n)
 \mid
 x_i \in \left\{ a_i, b_i \right\}
 \right\}$$
