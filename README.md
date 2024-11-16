@@ -132,11 +132,13 @@ Tuto distibuci lze dělat donekonečna,
 nicméně počet klauzulí roste exponenciálně.
 
 Pomocí těchto úprav lze finální výrok generovat jako:
-$$\bigwedge \{
+
+$$\bigwedge \left\{
 (x_1 \lor x_2 \lor ... x_n)
 \mid
 x_i \in \{ a_i, b_i \}
-\}$$
+\right\}$$
+
 Aneb všechny kombinace klauzulí, kdy v každé je vždy právě $a_i$ nebo $b_i$
 Následná zpětná substituce nedělá problém, jelikož původní výraz
 je disjunkce, kterou vkládám do dalších disjunkcí.
