@@ -8,21 +8,46 @@ ___
 
 Hraje se na čtvercovém hracím poli se sudou výškou a šířkou $n$.
 Některá políčka jsou předem vyplněna jedním ze dvou symbolů.
-Zde předpokládám, že jsou to sybloly "X" a "O",
+Zde předpokládám, že jsou to sybloly `X` a `O`,
 nicméně to můžou být i třeba černé a bílé body, je to jedno. 
 
 Úkolem je pak vyplnit zbývající políčka právě jedním z dvou symbolů
 v souladu s následujícími třemi pravidly:
 
 1.  Na každé řádce a na každém sloupci musí být
-stejně symbolů "X", jako symbol" "O". (Řádka `XXOX` je nelegální)  
+stejně symbolů `X`, jako symbolů `O`. (Řádka `XXOX` je nelegální)  
 1. Nesmí být více než dva stejné symboly v řadě nebo ve sloupci
 hned za sebou. (Řádka `XXXOOO` je nelegální)
 1. Žádné dva řádky a žádné dva sloupce nesmí být identické,
 co se pořadí symbolů týče.
 
+### Spuštění programu
+
+`./binario_puzzle.py [-i INPUT] [-o OUTPUT] [-s [OPERATING-SYSTEM] [-v {0,1,2}]`
+
+- `OUTPUT` je soubor mezivýsledku ve formátu DIMACS CNF,
+na který je následně zavolán Glucose SAT solver
+- `OPERATING-SYSTEM` bere buď hodnotu "win" nebo "unix". Jde o to,
+že jiné architektury využívají trochu jinou verzi solveru.
+- `-v` Výřečnost samotného solveru.
+- `INPUT` Vsupní soubor, viz dole...
+
+#### Formát vstupu
+Program potřebuje na vstupu soubor, jehož formát vyžaduje,
+aby měl na každém řádku sudé $n$ symbolů `X` nebo `O`
+a takových řádků bylo taky $n$. Soubor může a nemusí končit
+jedním prázdným řádkem. 
 
 
+### Kódování do CNF
+Kódování logických proměnných je velice prosté.
+Stačilo implementovat matici $n*n$, kde proměnná na pozici $i,j$ říká,
+že na pozici $i,j$ hracího pole je symbol `X`. Píšu $p_{i,j}$.
+Negace tohoto výroku říká, že na pozici je `O`.
+
+Při implementaci samotných pravidel vše rovnou generuji jako CNF klauzule,
+které pak spojuji, než abych tvořil složitější ale kratší výrok
+a ten pak stejně musel do CNF upravit.  
 
 ### Zakódování 1. pravidla
 Bohužel ve světě výrokových proměnných nelze úplně dobře počítat,
@@ -31,7 +56,7 @@ kolik je jich pravdivých a kolik ne.
 nebo naopak zakázat všechny nelegální.
 Já zvolil druhou možnost.
 
-Je to z důvodu, že když bych chtěl například zakázat řádku OOOX,
+Je to z důvodu, že když bych chtěl například zakázat řádku `OOOX`,
 můžu napsat výrok $\neg(p_1 \land p_2 \land p_3 \land \neg p_4)$,
 což se dá přepsat jako $(\neg p_1 \lor \neg p_2 \lor \neg p_3 \lor p_4)$. 
 Tyto výrazy se spojují do disjunkcí a výraz je tak rovnou v CNF.
@@ -109,3 +134,5 @@ Výsledný CNF výrok bude mít $2^n$ klauzulí, každou s $2n$ literály.
 Dohromady pro celou tabulku $2^{n+1}*n(n-1)$ takových klauzulí.
 
 Tento konkrétní zápis 3. pravidla přímo vybízí k využití rekurze, což jsem udělal.
+
+
