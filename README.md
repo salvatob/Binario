@@ -82,7 +82,7 @@ klauzulí, každá s $n$ literály.
 ### Zakódování 2. pravidla
 To nejlehčí. Stačí pro každé tři body vedle sebe chtít, aby se lišily.
 
-Logicky zapsáno $ (p \lor q \lor r) \land (\neg p  \lor \neg q \lor \neg r) $.
+Logicky zapsáno $(p \lor q \lor r) \land (\neg p  \lor \neg q \lor \neg r)$.
 
 Pak stačí tyto klauzule napsat pro všechny body ve všech řádkách a sloupcích.
 
