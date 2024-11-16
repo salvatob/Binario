@@ -1,6 +1,3 @@
-from typing import List, Any
-
-
 def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]:
     positive_literal = 'X'
     negative_literal = 'O'
@@ -24,13 +21,19 @@ def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]
         variables = create_logical_variables(puzzle_size)
 
         for  line, row in zip(lines, variables):
-            for i, char in enumerate(line):
+            for i, char in enumerate(line.upper()):
                 if char == positive_literal:
                     clauses.append(f"{row[i]}")
                 if char == negative_literal:
                     clauses.append(f"-{row[i]}")
 
     return variables, clauses, puzzle_size
+
+def get_matrix_column(matrix :list[list[int]], column_index : int)-> list[int]:
+    column = []
+    for i in range(len(matrix)):
+        column.append(matrix[i][column_index])
+    return column
 
 def create_logical_variables(size: int) -> list[list[int]]:
     # each logical variable is encoded as an int, accessed exclusively through an array
@@ -52,7 +55,7 @@ def compare_rows(variables : list[list[int]], row1 : int, row2 : int) -> list[st
     variables_second = variables[row2]
     statements = []
 
-    recursively_encode_lines(variables,0, variables_first, variables_second, "", statements)
+    recursively_encode_lines(0, variables_first, variables_second, "", statements)
 
     return statements
 
@@ -68,11 +71,11 @@ def compare_columns(variables : list[list[int]], column1 : int, column2 : int) -
 
     statements = []
 
-    recursively_encode_lines(variables, 0, variables_first, variables_second, "", statements)
+    recursively_encode_lines(0, variables_first, variables_second, "", statements)
 
     return statements
 
-def recursively_encode_lines(variables : list[list[int]], current_depth: int, variables_1 : list[int], variables_2 : list[int], current_clause : str, clausules : list[str]):
+def recursively_encode_lines(current_depth: int, variables_1 : list[int], variables_2 : list[int], current_clause : str, clausules : list[str]):
     if current_depth >= len(variables_1):
         clausules.append(current_clause)
         return
@@ -82,7 +85,7 @@ def recursively_encode_lines(variables : list[list[int]], current_depth: int, va
     ]
     for each_var in new_additions:
         new_bracket = current_clause + each_var
-        recursively_encode_lines(variables, current_depth + 1, variables_1, variables_2, new_bracket, clausules)
+        recursively_encode_lines(current_depth +1,variables_1, variables_2, new_bracket, clausules)
 
 def encode_grouping(variables : list[list[int]]) -> list[str]:
     # for any row/column, no more, than 2 same values can be next to each other
@@ -106,28 +109,42 @@ def encode_grouping(variables : list[list[int]]) -> list[str]:
     return clauses
 
 def encode_dot_counts(variables: list[list[int]]) -> list[str]:
-    size = len(variables)
     clauses: list[str] = []
+
+    for row in variables:
+        clauses += encode_line_dot_count(row)
+
+    for i in range(len(variables)):
+        column = get_matrix_column(variables, i)
+        clauses += encode_line_dot_count(column)
 
     return clauses
 
 def encode_line_dot_count(line: list[int])-> list[str]:
     clauses: list[str] = []
 
-
-
+    recurse_dot_count(line, 0, "", clauses)
 
     return clauses
 
-def recurse_dot_count(line: list[int], current_depth: int, current_clause: str , clauses : list[str])-> list[str]:
+def recurse_dot_count(line: list[int], current_depth: int, current_clause: str , clauses : list[str]):
     if current_depth >= len(line):
-        clauses.append(current_clause)
+        if check_if_illegal(current_clause):
+            clauses.append(current_clause)
         return
 
-    new_clause_1 = current_clause + str(line[current_depth])
-    new_clause_2 = current_clause + "-" +str(line[current_depth])
+    new_clause_1 = current_clause + str(line[current_depth]) + " "
+    new_clause_2 = current_clause + "-" +str(line[current_depth]) + " "
 
     recurse_dot_count(line, current_depth + 1, new_clause_1, clauses)
     recurse_dot_count(line, current_depth + 1, new_clause_2, clauses)
 
-
+def check_if_illegal(line: str) -> bool:
+    tokens = line.strip().split(" ")
+    positive = negative = 0
+    for token in tokens:
+        if token.startswith("-"):
+            negative += 1
+        else:
+            positive += 1
+    return positive != negative
