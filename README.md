@@ -138,9 +138,12 @@ je disjunkce, kterou vkládám do dalších disjunkcí.
 Původní velká disjunkce měla $n$ vnitřních členů,
 kde každý člen obsahoval $4$ literály.
 Výsledný CNF výrok bude mít $2^n$ klauzulí, každou s $2n$ literály.
-Dohromady pro celou tabulku $2*2^{n}*n(n-1)$ takových klauzulí.
+Dohromady pro celou tabulku $2^{n}*n(n-1)$ takových klauzulí.
 
 Tento konkrétní zápis 3. pravidla přímo vybízí k využití rekurze, což jsem udělal.
 
-V celku, (jestli správně počítám
-)
+V celku je to asymptotycky $O(2^n)$ klauzulí,
+vzhledem k velikosti tabulky.
+
+
+### Testování
