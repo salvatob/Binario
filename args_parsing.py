@@ -21,8 +21,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "-s",
-    "--solver",
-    default="./win_solver/glucose-syrup.exe",
+    "--operating-system",
+    default="windows",
     type=str,
     help=(
         "The SAT solver to be used."
