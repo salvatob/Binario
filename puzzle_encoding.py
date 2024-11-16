@@ -1,4 +1,4 @@
-def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]:
+def parse_input(input_file_path: str) -> tuple[list[list[int]], list[str], int]:
     positive_literal = 'X'
     negative_literal = 'O'
 
@@ -18,7 +18,7 @@ def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]
 
         variables = create_logical_variables(puzzle_size)
 
-        for  line, row in zip(lines, variables):
+        for line, row in zip(lines, variables):
             if len(line.strip()) != n:
                 raise Exception("Input file must have same number of symbols on each line")
 
@@ -30,28 +30,32 @@ def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]
 
     return variables, clauses, puzzle_size
 
-def get_matrix_column(matrix :list[list[int]], column_index : int)-> list[int]:
+
+def get_matrix_column(matrix: list[list[int]], column_index: int) -> list[int]:
     column = []
     for i in range(len(matrix)):
         column.append(matrix[i][column_index])
     return column
 
+
 def create_logical_variables(size: int) -> list[list[int]]:
     # each logical variable is encoded as an int, accessed exclusively through an array
     # using standard array coordinates (indexes)
-    variables = [ [j + (i*size) + 1 for j in range(size)] for i in range(size)]
+    variables = [[j + (i * size) + 1 for j in range(size)] for i in range(size)]
     return variables
 
-def encode_line_uniqueness(variables : list[list[int]]):
+
+def encode_line_uniqueness(variables: list[list[int]]):
     size = len(variables)
     clauses = []
     for i in range(size):
-        for j in range(i+1, size):
-            clauses += (compare_rows(variables, i,j))
-            clauses += (compare_columns(variables, i,j))
+        for j in range(i + 1, size):
+            clauses += (compare_rows(variables, i, j))
+            clauses += (compare_columns(variables, i, j))
     return clauses
 
-def compare_rows(variables : list[list[int]], row1 : int, row2 : int) -> list[str]:
+
+def compare_rows(variables: list[list[int]], row1: int, row2: int) -> list[str]:
     variables_first = variables[row1]
     variables_second = variables[row2]
     statements = []
@@ -60,7 +64,8 @@ def compare_rows(variables : list[list[int]], row1 : int, row2 : int) -> list[st
 
     return statements
 
-def compare_columns(variables : list[list[int]], column1 : int, column2 : int) -> list[str]:
+
+def compare_columns(variables: list[list[int]], column1: int, column2: int) -> list[str]:
     size = len(variables)
 
     variables_first = []
@@ -76,9 +81,11 @@ def compare_columns(variables : list[list[int]], column1 : int, column2 : int) -
 
     return statements
 
-def recursively_encode_lines(current_depth: int, variables_1 : list[int], variables_2 : list[int], current_clause : str, clausules : list[str]):
+
+def recursively_encode_lines(current_depth: int, variables_1: list[int], variables_2: list[int], current_clause: str,
+                             clauses: list[str]):
     if current_depth >= len(variables_1):
-        clausules.append(current_clause)
+        clauses.append(current_clause)
         return
     new_additions = [
         f" {variables_1[current_depth]} {variables_2[current_depth]}",
@@ -86,14 +93,15 @@ def recursively_encode_lines(current_depth: int, variables_1 : list[int], variab
     ]
     for each_var in new_additions:
         new_bracket = current_clause + each_var
-        recursively_encode_lines(current_depth +1,variables_1, variables_2, new_bracket, clausules)
+        recursively_encode_lines(current_depth + 1, variables_1, variables_2, new_bracket, clauses)
 
-def encode_grouping(variables : list[list[int]]) -> list[str]:
+
+def encode_grouping(variables: list[list[int]]) -> list[str]:
     # for any row/column, no more, than 2 same values can be next to each other
     # equivalent with: for each three dots, that are directly next to each other vertically or diagonally
     # one must be different
     size = len(variables)
-    clauses : list[str] = []
+    clauses: list[str] = []
 
     for i in range(size):
         for j in range(size - 2):
@@ -109,6 +117,7 @@ def encode_grouping(variables : list[list[int]]) -> list[str]:
 
     return clauses
 
+
 def encode_dot_counts(variables: list[list[int]]) -> list[str]:
     clauses: list[str] = []
 
@@ -121,24 +130,27 @@ def encode_dot_counts(variables: list[list[int]]) -> list[str]:
 
     return clauses
 
-def encode_line_dot_count(line: list[int])-> list[str]:
+
+def encode_line_dot_count(line: list[int]) -> list[str]:
     clauses: list[str] = []
 
     recurse_dot_count(line, 0, "", clauses)
 
     return clauses
 
-def recurse_dot_count(line: list[int], current_depth: int, current_clause: str , clauses : list[str]):
+
+def recurse_dot_count(line: list[int], current_depth: int, current_clause: str, clauses: list[str]):
     if current_depth >= len(line):
         if check_if_illegal(current_clause):
             clauses.append(current_clause)
         return
 
     new_clause_1 = current_clause + str(line[current_depth]) + " "
-    new_clause_2 = current_clause + "-" +str(line[current_depth]) + " "
+    new_clause_2 = current_clause + "-" + str(line[current_depth]) + " "
 
     recurse_dot_count(line, current_depth + 1, new_clause_1, clauses)
     recurse_dot_count(line, current_depth + 1, new_clause_2, clauses)
+
 
 def check_if_illegal(line: str) -> bool:
     tokens = line.strip().split(" ")
