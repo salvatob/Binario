@@ -113,11 +113,9 @@ $$
 $$
 
 Platí že:
-$
-(a_1 \land b_1) \lor (a_2 \land b_2) \approx
+$$(a_1 \land b_1) \lor (a_2 \land b_2) \approx
 (a_1 \lor a_2) \land (a_1 \lor b_2) \land
-(b_1 \lor a_2) \land ( b_1 \lor b_2)
-$
+(b_1 \lor a_2) \land ( b_1 \lor b_2)$$
 
 Tudíž pomocí distributivity prohodím vnější disjunkce dovnitř
 a konjunkce ven.
