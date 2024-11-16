@@ -1,21 +1,26 @@
 import math
 import subprocess
 from time import perf_counter
+from args_parsing import parser
 
 from puzzle_encoding import parse_input, encode_grouping, encode_line_uniqueness, encode_dot_counts
 
 
-def encode_puzzle(input_file_path: str, output_file_path: str):
+def encode_puzzle(input_file_path: str, output_file_path: str, verb: int):
     variables, puzzle_specific_clauses, size = parse_input(input_file_path)
 
     grouping_clauses = encode_grouping(variables)
-    print("encoded 1")
+
+    if verb > 0:
+        print("1st rule encoded")
 
     uniqueness_clauses = encode_line_uniqueness(variables)
-    print("encoded 2")
+    if verb > 0:
+        print("2nd rule encoded")
 
     dot_count_clauses = encode_dot_counts(variables)
-    print("encoded 3")
+    if verb > 0:
+        print("3rd rule encoded")
 
     all_clauses = puzzle_specific_clauses + grouping_clauses + uniqueness_clauses + dot_count_clauses
 
@@ -30,13 +35,24 @@ def write_cnf(clauses : list[str], num_of_variables: int, output_file_path: str)
         for clause in clauses:
             file.write(f"\n{clause} 0")
 
-def call_solver(input_file_path: str, verbosity: int = 2) -> str:
-    result = subprocess.run(['./win_solver/glucose-syrup.exe', '-model', '-verb=' + str(verbosity), input_file_path],
+def call_solver(input_file_path: str, solver_architecture : str,verbosity: int = 2) -> str:
+    solver_path = ""
+    if solver_architecture == "win":
+        solver_path = "win_solver/glucose-syrup.exe"
+    if solver_architecture == "unix":
+        solver_path = "unix_solver/glucose_solver"
+    if solver_path == "":
+        raise Exception("Solver OS wrongly specified. \n use either \"win\" or \"unix\"")
+
+    solver_result = subprocess.run(['./' + solver_path, '-model', '-verb=' + str(verbosity), input_file_path],
                           stdout=subprocess.PIPE)
-    for line in result.stdout.decode('utf-8').split('\n'):
+
+    result_line = ""
+    for line in solver_result.stdout.decode('utf-8').split('\n'):
         if line.startswith('v'):
             result_line = line
         print(line)
+
     return result_line
 
 def human_readable_result(result: str):
@@ -53,16 +69,15 @@ def human_readable_result(result: str):
         print(line)
 
 
+def main(args):
+    encode_puzzle(args.input, args.output, args.verb)
+
+    result = call_solver(args.output,args.system, args.verb)
+    if args.verb > 0:
+        human_readable_result(result)
+
+
 if __name__ == '__main__':
-    t1_start = perf_counter()
+    args = parser.parse_args()
 
-    encode_puzzle( "input.txt", "output.cnf")
-
-    print("encoded all")
-
-    t1_stop = perf_counter()
-
-    print(f"encoding took: {t1_stop - t1_start} ms")
-
-    result = call_solver("output.cnf", 2)
-    human_readable_result(result)
+    main(args)
