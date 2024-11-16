@@ -97,7 +97,7 @@ Nerovnost dvou proměnných kóduji jako:
 $p \neq q \approx (p \lor q) \land (\neg p \lor \neg q)$.
 
 Všechny páry proměnných takto v závorkách spojím do disjunkce.
-$p_*$ je jeden řádek, $q_*$ je jiný řádek.
+$p_\*$ je jeden řádek, $q_\*$ je jiný řádek.
 
 $$\bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
 \land (\neg p_{i} \lor \neg q_{i}))
@@ -108,6 +108,7 @@ $$\bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
 Následně substituuji $(p_{1} \lor q_{1})$ za $a_1$, 
 $(\neg p_{1} \lor \neg q_{1}))$ za $b_1...$
 A dojdu k výroku: 
+
 $$
 \bigvee_{i=1}^{n} (a_i \land b_i)
 $$
