@@ -1,19 +1,17 @@
 def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]:
     positive_literal = 'X'
     negative_literal = 'O'
-    unknown_literal = '_'
 
     clauses = []
     with open(input_file_path, "r") as file:
 
-        lines = file.readlines()
+        lines = file.read().strip().split("\n")
+        n = len(lines[0].strip())
+        if n % 2 != 0 or n == 0:
+            raise Exception("Input file must have even nonzero number of symbols on each line")
+        if len(lines) != n:
+            raise Exception("Input file doesnt have same number of lines as symbols on first line")
 
-
-        # print("lines")
-        # for line in lines:
-        #     print(line)
-        #
-        # print("------")
         puzzle_size = len(lines)
         if lines[-1] == "":
             puzzle_size -= 1
@@ -21,6 +19,9 @@ def parse_input(input_file_path : str) -> tuple[list[list[int]], list[str], int]
         variables = create_logical_variables(puzzle_size)
 
         for  line, row in zip(lines, variables):
+            if len(line.strip()) != n:
+                raise Exception("Input file must have same number of symbols on each line")
+
             for i, char in enumerate(line.upper()):
                 if char == positive_literal:
                     clauses.append(f"{row[i]}")
