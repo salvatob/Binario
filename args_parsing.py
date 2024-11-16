@@ -4,7 +4,7 @@ parser = ArgumentParser()
 parser.add_argument(
         "-i",
         "--input",
-        default="input.in",
+        default="puzzle_instances/solvable_6x6.txt",
         type=str,
         help=(
             "The instance file."
@@ -13,7 +13,7 @@ parser.add_argument(
 parser.add_argument(
     "-o",
     "--output",
-    default="formula.cnf",
+    default="output.cnf",
     type=str,
     help=(
         "Output file for the DIMACS format (i.e. the CNF formula)."
@@ -21,19 +21,19 @@ parser.add_argument(
 )
 parser.add_argument(
     "-s",
-    "--operating-system",
-    default="windows",
+    "--system",
+    default="win",
     type=str,
     help=(
-        "The SAT solver to be used."
+        "Current OS used to specify which glucose solver binary to use."
     ),
 )
 parser.add_argument(
     "-v",
     "--verb",
-    default=1,
+    default=2,
     type=int,
-    choices=range(0,2),
+    choices=range(0,3),
     help=(
         "Verbosity of the SAT solver used."
     ),
