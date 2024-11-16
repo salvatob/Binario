@@ -38,7 +38,7 @@ Program potřebuje na vstupu soubor, jehož formát vyžaduje,
 aby měl na každém řádku sudé $n$ symbolů `X`, `O`, nebo 
 prázdný symbolů `_`
 a takových řádků bylo taky $n$. Soubor může a nemusí končit
-jedním prázdným řádkem. 
+jedním prázdným řádkem. Může obsahovat mezery.
 V adresáři projektu je podadresář `/puzzle_instances`,
 který obsahuje několik předem připravených instancí ve
 spravném formátu.
@@ -100,10 +100,9 @@ Všechny páry proměnných takto v závorkách spojím do disjunkce.
 $p_\*$ je jeden řádek, $q_\*$ je jiný řádek.
 
 $$\bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
-\land (\neg p_{i} \lor \neg q_{i}))
-=
+\land (\neg p_{i} \lor \neg q_{i})) =
 ((p_{1} \lor q_{1}) \land (\neg p_{1} \lor \neg q_{1})) \lor
-((p_{2} \lor q_{2}) \land (\neg p_{2} \lor \neg q_{2})) ...$$ 
+((p_{2} \lor q_{2}) \land (\neg p_{2} \lor \neg q_{2})) \.\.\.$$ 
 
 Následně substituuji $(p_{1} \lor q_{1})$ za $a_1$, 
 $(\neg p_{1} \lor \neg q_{1}))$ za $b_1...$
