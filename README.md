@@ -104,7 +104,7 @@ $p \neq q \approx (p \lor q) \land (\neg p \lor \neg q)$.
 Všechny páry proměnných takto v závorkách spojím do disjunkce.
 $p_{\*}$ je jeden řádek, $q_{\*}$ je jiný řádek.
 
-$ a_* b_{*} c_\* d_{\*} $
+$a_* b_{*} c_\* d_{\*}$
 
 $$\bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
 \land (\neg p_{i} \lor \neg q_{i})) =
