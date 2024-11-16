@@ -146,4 +146,19 @@ V celku je to asymptotycky $O(2^n)$ klauzulí,
 vzhledem k velikosti tabulky.
 
 
-### Testování
+### Testování a statistiky
+
+Samotný glucose solver zvládne i 14x14 instanci vyřešit asi za sekundu.
+
+Problém je tedy pak hlavně s tím, že se CNF formule ukládá v
+textovém formátu, a to zabírá strašně moc místa.
+Jak v paměti, tak na disku. 
+
+Pro instance bylo vygenerováno cca:
+
+| Velikost n | Počet klauzulí | Velikost CNF souboru |
+|------------|----------------|----------------------|
+| 6          | 2,5k           | 95KB                 |
+| 8          | 17k            | 901KB                |
+| 10         | 108k           | 7MB                  |
+| 14         | 3,3M           | 360MB                |

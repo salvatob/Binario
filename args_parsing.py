@@ -13,7 +13,7 @@ parser.add_argument(
 parser.add_argument(
     "-o",
     "--output",
-    default="output.cnf",
+    default="out/output.txt",
     type=str,
     help=(
         "Output file for the DIMACS format (i.e. the CNF formula)."
