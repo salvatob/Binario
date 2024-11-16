@@ -18,7 +18,7 @@ v souladu s následujícími třemi pravidly:
 stejně symbolů `X`, jako symbolů `O`. (Řádka `XXOX` je nelegální)  
 1. Nesmí být více než dva stejné symboly v řadě nebo ve sloupci
 hned za sebou. (Řádka `XXXOOO` je nelegální)
-1. Žádné dva řádky a žádné dva sloupce nesmí být identické,
+1. Žádné dva řádky ani žádné dva sloupce nesmí být identické,
 co se pořadí symbolů týče.
 
 ### Spuštění programu
@@ -26,17 +26,22 @@ co se pořadí symbolů týče.
 `./binario_puzzle.py [-i INPUT] [-o OUTPUT] [-s [OPERATING-SYSTEM] [-v {0,1,2}]`
 
 - `OUTPUT` je soubor mezivýsledku ve formátu DIMACS CNF,
-na který je následně zavolán Glucose SAT solver
+na který je následně zavolán Glucose SAT solver (default `"output.cnf"`)
 - `OPERATING-SYSTEM` bere buď hodnotu "win" nebo "unix". Jde o to,
-že jiné architektury využívají trochu jinou verzi solveru.
-- `-v` Výřečnost samotného solveru.
+že jiné architektury využívají trochu jinou verzi solveru. (default `"win"`)
+- `-v` Výřečnost samotného solveru. Když je > 1, na stdout
+se vypíše lidsky čitelné řešení. 
 - `INPUT` Vsupní soubor, viz dole...
 
 #### Formát vstupu
 Program potřebuje na vstupu soubor, jehož formát vyžaduje,
-aby měl na každém řádku sudé $n$ symbolů `X` nebo `O`
+aby měl na každém řádku sudé $n$ symbolů `X`, `O`, nebo 
+prázdný symbolů `_`
 a takových řádků bylo taky $n$. Soubor může a nemusí končit
 jedním prázdným řádkem. 
+V adresáři projektu je podadresář `/puzzle_instances`,
+který obsahuje několik předem připravených instancí ve
+spravném formátu.
 
 
 ### Kódování do CNF
@@ -47,7 +52,15 @@ Negace tohoto výroku říká, že na pozici je `O`.
 
 Při implementaci samotných pravidel vše rovnou generuji jako CNF klauzule,
 které pak spojuji, než abych tvořil složitější ale kratší výrok
-a ten pak stejně musel do CNF upravit.  
+a ten pak stejně musel do CNF upravit.
+
+## Generování pravidel
+
+### Zakódování samotné instance
+Stačí k výslednému CNF připojit jednotkové klauzule,
+obsahující buď $p_{i,j}$, nebo $\neg p_{i,j}$, podle toho,
+jestli je na vstupu na dané pozici expllicitní symbol.
+Když na pozici je akorát `_`, daný literál v tomto kroce vynecháme.
 
 ### Zakódování 1. pravidla
 Bohužel ve světě výrokových proměnných nelze úplně dobře počítat,
@@ -69,7 +82,7 @@ klauzulí, každá s $n$ literály.
 ### Zakódování 2. pravidla
 To nejlehčí. Stačí pro každé tři body vedle sebe chtít, aby se lišily.
 
-Logicky zapsáno $ (p \lor q \lor r) \land (\neg p  \lor \neg q \lor \neg r)$.
+Logicky zapsáno $ (p \lor q \lor r) \land (\neg p  \lor \neg q \lor \neg r) $.
 
 Pak stačí tyto klauzule napsat pro všechny body ve všech řádkách a sloupcích.
 
@@ -84,7 +97,7 @@ Nerovnost dvou proměnných kóduji jako:
 $p \neq q \approx (p \lor q) \land (\neg p \lor \neg q)$.
 
 Všechny páry proměnných takto v závorkách spojím do disjunkce.
-
+$p_*$ je jeden řádek, $q_*$ je jiný řádek.
 
 $$
 \bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
@@ -94,7 +107,7 @@ $$
 ((p_{2} \lor q_{2}) \land (\neg p_{2} \lor \neg q_{2})) ...
 $$ 
 
-Následně substitutuji $(p_{1} \lor q_{1})$ za $a_1$, 
+Následně substituuji $(p_{1} \lor q_{1})$ za $a_1$, 
 $(\neg p_{1} \lor \neg q_{1}))$ za $b_1...$
 A dojdu k výroku: 
 $$
@@ -135,4 +148,5 @@ Dohromady pro celou tabulku $2^{n+1}*n(n-1)$ takových klauzulí.
 
 Tento konkrétní zápis 3. pravidla přímo vybízí k využití rekurze, což jsem udělal.
 
-
+V celku, (jestli správně počítám
+)
