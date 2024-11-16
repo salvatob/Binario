@@ -102,7 +102,7 @@ Nerovnost dvou proměnných kóduji jako:
 $p \neq q \approx (p \lor q) \land (\neg p \lor \neg q)$.
 
 Všechny páry proměnných takto v závorkách spojím do disjunkce.
-$p_*$ je jeden řádek, $q_*$ je jiný řádek.
+$p_* $ je jeden řádek, $q_* $ je jiný řádek.
 
 $a_* b_{*} c_\* d_{\*}$
 
@@ -132,9 +132,10 @@ Tuto distibuci lze dělat donekonečna,
 nicméně počet klauzulí roste exponenciálně.
 
 Pomocí těchto úprav lze finální výrok generovat jako:
-$$\bigwedge \{ (x_1 \lor x_2 \lor ... x_n)
+$$\bigwedge \{
+(x_1 \lor x_2 \lor ... x_n)
 \mid
-x_i \in \left\{ a_i, b_i \right\}
+x_i \in \{ a_i, b_i \}
 \}$$
 Aneb všechny kombinace klauzulí, kdy v každé je vždy právě $a_i$ nebo $b_i$
 Následná zpětná substituce nedělá problém, jelikož původní výraz
