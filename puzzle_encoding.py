@@ -5,7 +5,7 @@ def parse_input(input_file_path: str) -> tuple[list[list[int]], list[str], int]:
     clauses = []
     with open(input_file_path, "r") as file:
 
-        lines = file.read().strip().split("\n")
+        lines = file.read().strip().splitlines()
         n = len(lines[0].strip())
         if n % 2 != 0 or n == 0:
             raise Exception("Input file must have even nonzero number of symbols on each line")
