@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def parse_input(input_file_path: str) -> tuple[list[list[int]], list[str], int]:
     positive_literal = 'X'
     negative_literal = 'O'
