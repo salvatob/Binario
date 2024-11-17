@@ -44,7 +44,16 @@ a takových řádků bylo taky $n$. Soubor může a nemusí končit
 jedním prázdným řádkem. Může obsahovat mezery.
 V adresáři projektu je podadresář `/puzzle_instances`,
 který obsahuje několik předem připravených instancí ve
-spravném formátu.
+spravném formátu. Pozor, skript funguje správně,
+jen když je vstupní soubor zakódován v UTF-8.
+
+Příklad validního formátu.
+```
+X__O
+OX__
+___O
+OO__
+```
 
 ### Kódování do CNF
 
@@ -61,9 +70,9 @@ a ten pak stejně musel do CNF upravit.
 
 ### Zakódování samotné instance
 
-Stačí k výslednému CNF připojit jednotkové klauzule,
+Co se konkrétní instance binaria týče, stačí k výslednému CNF připojit jednotkové klauzule,
 obsahující buď $p_{i,j}$, nebo $\neg p_{i,j}$, podle toho,
-jestli je na vstupu na dané pozici expllicitní symbol.
+jestli je na vstupu na dané pozici explicitní symbol.
 Když na pozici je akorát `_`, daný literál v tomto kroce vynecháme.
 
 ### Zakódování 1. pravidla
@@ -102,9 +111,7 @@ Nerovnost dvou proměnných kóduji jako:
 $p \neq q \approx (p \lor q) \land (\neg p \lor \neg q)$.
 
 Všechny páry proměnných takto v závorkách spojím do disjunkce.
-$p_* $ je jeden řádek, $q_* $ je jiný řádek.
-
-$a_* b_{*} c_\* d_{\*}$
+$p_\*$ je jeden řádek, $q_\*$ je jiný řádek.
 
 $$\bigvee_{i=1}^{n} ((p_{i} \lor q_{i})
 \land (\neg p_{i} \lor \neg q_{i})) =
@@ -133,11 +140,11 @@ nicméně počet klauzulí roste exponenciálně.
 
 Pomocí těchto úprav lze finální výrok generovat jako:
 
-$$\bigwedge \left\{
+$$\bigwedge  (
 (x_1 \lor x_2 \lor ... x_n)
 \mid
 x_i \in \{ a_i, b_i \}
-\right\}$$
+)$$
 
 Aneb všechny kombinace klauzulí, kdy v každé je vždy právě $a_i$ nebo $b_i$
 Následná zpětná substituce nedělá problém, jelikož původní výraz
@@ -160,6 +167,10 @@ Samotný glucose solver zvládne i 14x14 instanci vyřešit asi za sekundu.
 Problém je tedy pak hlavně s tím, že se CNF formule ukládá v
 textovém formátu, a to zabírá strašně moc místa.
 Jak v paměti, tak na disku.
+Jsem celkem jist, že by nebyl z pohledu SAT solveru problém řešit instance 20x20,
+nebo i větší, nicméně by to pak vyžadovalo optimalizace paměti.
+Např. ukládat klauzule do souboru postupně, nikoliv si je pamatovat celé v paměti.
+
 
 Pro instance bylo vygenerováno cca:
 
