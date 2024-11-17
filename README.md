@@ -55,6 +55,9 @@ ___O
 OO__
 ```
 
+Projekt obsahuje i pár řádek javascript kódu, který dokáže
+rychle zkopírovat konkrétní hlavolam ze stránky [Binario](https://www.puzzle-binairo.com)
+
 ### Kódování do CNF
 
 Kódování logických proměnných je velice prosté.
